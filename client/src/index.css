@@ -39,13 +39,13 @@
 .footer {
   color: white;
   padding: 25px;
-  background: #488a90; /* fallback for old browsers */
+  background: #227158; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to right,
-    #7bbec4,
-    #488a90
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #7bbec4, #488a90);
+    #a5f5db
+    #227158
+  );
+  background: linear-gradient(to right,#a5f5db,#227158 );
 }
 
 .footer a {
