@@ -79,11 +79,7 @@ const Header = () => {
                                                         Dashboard
                                                     </NavLink>
                                                 </li>
-                                                <li>
-                                                    <NavLink to="/sell" className="dropdown-item">
-                                                        Sell
-                                                    </NavLink>
-                                                </li>
+
                                                 <li>
                                                     <NavLink
                                                         onClick={handleLogout}
