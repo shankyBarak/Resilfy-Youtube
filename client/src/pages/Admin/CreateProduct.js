@@ -18,7 +18,7 @@ const CreateProduct = () => {
   const [shipping, setShipping] = useState("");
   const [photo, setPhoto] = useState("");
 
-  //get all category
+  // Get all categories
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/category/get-category`);
@@ -27,7 +27,7 @@ const CreateProduct = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something wwent wrong in getting catgeory");
+      toast.error("Something went wrong in getting categories");
     }
   };
 
@@ -35,7 +35,7 @@ const CreateProduct = () => {
     getAllCategory();
   }, []);
 
-  //create product function
+  // Create product function
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
@@ -47,7 +47,6 @@ const CreateProduct = () => {
       productData.append("photo", photo);
       productData.append("category", category);
 
-      // Await the axios post request
       const { data } = await axios.post(
         `${process.env.REACT_APP_API}/api/v1/product/create-product`,
         productData
@@ -65,10 +64,41 @@ const CreateProduct = () => {
     }
   };
 
-
   return (
     <Layout title={"Dashboard - Create Product"}>
-      <div className="container-fluid m-3 p-3">
+      <style>{`
+        .create-product-container {
+          background-color: #f7f9fc;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .form-control {
+          border-radius: 5px;
+          border: 1px solid #ced4da;
+          padding: 10px;
+        }
+        .form-label {
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+        .btn-primary {
+          background-color: #007bff;
+          border-color: #007bff;
+          padding: 10px 20px;
+        }
+        .btn-primary:hover {
+          background-color: #0056b3;
+          border-color: #0056b3;
+        }
+        .product-image {
+          height: 200px;
+          object-fit: cover;
+          margin: 10px 0;
+        }
+      `}</style>
+
+      <div className="container-fluid m-3 p-3 create-product-container">
         <div className="row">
           <div className="col-md-3">
             <AdminMenu />
@@ -92,6 +122,7 @@ const CreateProduct = () => {
                   </Option>
                 ))}
               </Select>
+
               <div className="mb-3">
                 <label className="btn btn-outline-secondary col-md-12">
                   {photo ? photo.name : "Upload Photo"}
@@ -104,59 +135,65 @@ const CreateProduct = () => {
                   />
                 </label>
               </div>
+
+              {photo && (
+                <div className="text-center mb-3">
+                  <img
+                    src={URL.createObjectURL(photo)}
+                    alt="product_photo"
+                    className="img img-responsive product-image"
+                  />
+                </div>
+              )}
+
               <div className="mb-3">
-                {photo && (
-                  <div className="text-center">
-                    <img
-                      src={URL.createObjectURL(photo)}
-                      alt="product_photo"
-                      height={"200px"}
-                      className="img img-responsive"
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="mb-3">
+                <label className="form-label">Product Name</label>
                 <input
                   type="text"
                   value={name}
-                  placeholder="write a name"
+                  placeholder="Enter product name"
                   className="form-control"
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
+
               <div className="mb-3">
+                <label className="form-label">Description</label>
                 <textarea
-                  type="text"
                   value={description}
-                  placeholder="write a description"
+                  placeholder="Write a description of your product"
                   className="form-control"
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
 
               <div className="mb-3">
+                <label className="form-label">Price</label>
                 <input
                   type="number"
                   value={price}
-                  placeholder="write a Price"
+                  placeholder="Enter product price"
                   className="form-control"
                   onChange={(e) => setPrice(e.target.value)}
                 />
               </div>
+
               <div className="mb-3">
+                <label className="form-label">Quantity</label>
                 <input
                   type="number"
                   value={quantity}
-                  placeholder="write a quantity"
+                  placeholder="Enter available quantity"
                   className="form-control"
                   onChange={(e) => setQuantity(e.target.value)}
                 />
               </div>
+
               <div className="mb-3">
+                <label className="form-label">Shipping</label>
                 <Select
                   bordered={false}
-                  placeholder="Select Shipping "
+                  placeholder="Select Shipping Option"
                   size="large"
                   showSearch
                   className="form-select mb-3"
@@ -168,6 +205,7 @@ const CreateProduct = () => {
                   <Option value="1">Yes</Option>
                 </Select>
               </div>
+
               <div className="mb-3">
                 <button className="btn btn-primary" onClick={handleCreate}>
                   CREATE PRODUCT
