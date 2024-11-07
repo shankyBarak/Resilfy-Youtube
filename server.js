@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes.js';
 import cors from 'cors';
 import categoryRoutes from './routes/categoryRoutes.js';
 import productRoutes from './routes/productRoutes.js';
+import userRoute from './routes/userRoute.js';
 
 dotenv.config();
 
@@ -21,7 +22,9 @@ app.use(morgan('dev'));
 // Route middlewares
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/category', categoryRoutes);
-app.use('/api/v1/product', productRoutes); // Add product routes here
+app.use('/api/v1/product', productRoutes);
+app.use('/api/v1/users', userRoute); // Add user routes
+
 
 app.get('/', (req, res) => {
     res.send("<h1>Welcome to Resellify</h1>");

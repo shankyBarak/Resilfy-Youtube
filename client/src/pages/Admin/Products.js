@@ -70,30 +70,30 @@ const Products = () => {
         </div>
         <div className="col-md-9">
           <h1 className="title">All Products List</h1>
-          <div className="d-flex flex-wrap justify-content-start">
+          <div className="row">
             {products?.map((p) => (
-              <Link
-                key={p._id}
-                to={`/dashboard/admin/product/${p.slug}`}
-                className="product-link"
-              >
-                <div className="card m-2 product-card" style={{ width: "18rem" }}>
-                  <img
-                    src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`}
-                    className="card-img-top product-img"
-                    alt={p.name}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{p.name}</h5>
-                    <p className="card-text">{p.description}</p>
+              <div key={p._id} className="col-md-4 mb-4">
+                <Link to={`/dashboard/admin/product/${p.slug}`} className="product-link">
+                  <div className="card product-card" style={{ width: "100%" }}>
+                    <img
+                      src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`}
+                      className="card-img-top product-img"
+                      alt={p.name}
+                    />
+                    <div className="card-body">
+                      <h5 className="card-title">{p.name}</h5>
+                      <p className="card-text">{p.description}</p>
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </div>
             ))}
           </div>
         </div>
       </div>
-    </Layout>
+
+
+    </Layout >
   );
 };
 
