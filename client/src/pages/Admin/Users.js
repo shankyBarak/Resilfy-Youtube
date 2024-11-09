@@ -1,104 +1,80 @@
-// User.js
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Select } from "antd";
 import AdminMenu from "../../components/Layout/AdminMenu";
-import Layout from "../../components/Layout/Layout";
-import { useAuth } from "../../context/auth";
-import moment from "moment";
+import Layout from "./../../components/Layout/Layout";
+import axios from "axios";
+import toast from "react-hot-toast";
 
-const { Option } = Select;
-
-const User = () => {
+const UserList = () => {
   const [users, setUsers] = useState([]);
-  const [roles, setRoles] = useState(["User", "Admin", "Moderator"]);
-  const [auth, setAuth] = useAuth();
 
-  // Fetch all users
-  const fetchUsers = async () => {
+  // Get all users
+  const getAllUsers = async () => {
     try {
-      const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/auth/all-users`, {
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
-      });
-      setUsers(data);
+      const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/users/all-users`);
+      setUsers(data.users);
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.log(error);
+      toast.error("Something went wrong while fetching users.");
     }
   };
 
-  // Update role for a specific user
-  const handleRoleChange = async (userId, value) => {
-    try {
-      await axios.put(
-        `${process.env.REACT_APP_API}/api/v1/auth/update-role/${userId}`,
-        { role: value },
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-      fetchUsers(); // Refresh users after role update
-    } catch (error) {
-      console.error("Error updating role:", error);
-    }
-  };
-
-  // Fetch users on component mount
+  // Lifecycle method
   useEffect(() => {
-    if (auth?.token) fetchUsers();
-  }, [auth?.token]);
+    getAllUsers();
+  }, []);
 
   return (
-    <Layout title="User Management">
-      <div className="row dashboard">
+    <Layout>
+      <style>{`
+        .users-container {
+          padding: 20px;
+          background-color: #f9f9f9;
+        }
+        .user-card {
+          border: none;
+          border-radius: 10px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s;
+        }
+        .user-card:hover {
+          transform: translateY(-5px);
+        }
+        .card-title {
+          font-size: 1.25rem;
+          font-weight: bold;
+        }
+        .card-text {
+          color: #6c757d;
+        }
+        .title {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+      `}</style>
+
+      <div className="row users-container">
         <div className="col-md-3">
           <AdminMenu />
         </div>
         <div className="col-md-9">
-          <h1 className="text-center">All Users</h1>
-          {users.map((user, index) => (
-            <div className="border shadow mb-3" key={user._id}>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Join Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{index + 1}</td>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>
-                      <Select
-                        bordered={false}
-                        onChange={(value) => handleRoleChange(user._id, value)}
-                        defaultValue={user.role}
-                      >
-                        {roles.map((role, idx) => (
-                          <Option key={idx} value={role}>
-                            {role}
-                          </Option>
-                        ))}
-                      </Select>
-                    </td>
-                    <td>{moment(user.createdAt).format("YYYY-MM-DD")}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          ))}
+          <h1 className="title">All Users List</h1>
+          <div className="row">
+            {users?.map((user) => (
+              <div key={user._id} className="col-md-4 mb-4">
+                <div className="user-card" style={{ width: "100%" }}>
+                  <div className="card-body">
+                    <h5 className="card-title">{user.name}</h5>
+                    <p className="card-text">{user.email}</p>
+                    <p className="card-text">Role: {user.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </Layout>
   );
 };
 
-export default User;
+export default UserList;

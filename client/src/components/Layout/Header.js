@@ -40,7 +40,9 @@ const Header = () => {
                             🛒 Reselify
                         </Link>
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <SearchInput />
+                            <li className="nav-item search-container">
+                                <SearchInput />
+                            </li>
                             <li className="nav-item">
                                 <NavLink to="/" className="nav-link ">
                                     Home
@@ -61,7 +63,7 @@ const Header = () => {
                                         </Link>
                                     </li>
                                     {categories?.map((c) => (
-                                        <li>
+                                        <li key={c._id}>
                                             <Link
                                                 className="dropdown-item"
                                                 to={`/category/${c.slug}`}
@@ -73,55 +75,53 @@ const Header = () => {
                                 </ul>
                             </li>
 
-                            {
-                                !auth.user ? (<>
-                                    <li className="nav-item">
-                                        <NavLink to="/register" className="nav-link">
-                                            Register
+                            {!auth.user ? (<>
+                                <li className="nav-item">
+                                    <NavLink to="/register" className="nav-link">
+                                        Register
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink to="/login" className="nav-link">
+                                        Login
+                                    </NavLink>
+                                </li>
+                            </>) : (
+                                <>
+                                    <li className="nav-item dropdown">
+                                        <NavLink
+                                            className="nav-link dropdown-toggle"
+                                            href="#"
+                                            role="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                        >
+                                            {auth?.user?.name}
                                         </NavLink>
-                                    </li>
-                                    <li className="nav-item">
-                                        <NavLink to="/login" className="nav-link">
-                                            Login
-                                        </NavLink>
-                                    </li>
-                                </>) : (
-                                    <>
-                                        <li className="nav-item dropdown">
-                                            <NavLink
-                                                className="nav-link dropdown-toggle"
-                                                href="#"
-                                                role="button"
-                                                data-bs-toggle="dropdown"
-                                                aria-expanded="false"
-                                            >
-                                                {auth?.user?.name}
-                                            </NavLink>
-                                            <ul className="dropdown-menu">
-                                                <li>
-                                                    <NavLink
-                                                        to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"
-                                                            }`}
-                                                        className="dropdown-item"
-                                                    >
-                                                        Dashboard
-                                                    </NavLink>
-                                                </li>
+                                        <ul className="dropdown-menu">
+                                            <li>
+                                                <NavLink
+                                                    to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"
+                                                        }`}
+                                                    className="dropdown-item"
+                                                >
+                                                    Dashboard
+                                                </NavLink>
+                                            </li>
 
-                                                <li>
-                                                    <NavLink
-                                                        onClick={handleLogout}
-                                                        to="/login"
-                                                        className="dropdown-item"
-                                                    >
-                                                        Logout
-                                                    </NavLink>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </>
-                                )
-                            }
+                                            <li>
+                                                <NavLink
+                                                    onClick={handleLogout}
+                                                    to="/login"
+                                                    className="dropdown-item"
+                                                >
+                                                    Logout
+                                                </NavLink>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </>
+                            )}
                             <li className="nav-item">
                                 <Badge count={cart?.length} showZero>
                                     <NavLink to="/cart" className="nav-link">
@@ -129,15 +129,57 @@ const Header = () => {
                                     </NavLink>
                                 </Badge>
                             </li>
-
-
                         </ul>
                     </div>
                 </div>
             </nav>
 
+            <style jsx>{`
+                .navbar {
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                    padding: 10px 20px;
+                }
+                .navbar-brand {
+                    font-weight: bold;
+                    font-size: 1.8rem;
+                    color: #0d6efd;
+                }
+                .navbar-nav .nav-link {
+                    font-size: 1.1rem;
+                    margin-left: 15px;
+                    color: #333;
+                    transition: color 0.3s ease;
+                }
+                .navbar-nav .nav-link:hover {
+                    color: #0d6efd;
+                }
+                .search-container {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                }
+                .search-container input {
+                    width: 250px;
+                    padding: 10px;
+                    font-size: 1.1rem;
+                    border-radius: 5px;
+                    border: 1px solid #ddd;
+                    transition: all 0.3s ease;
+                }
+                .search-container input:focus {
+                    border-color: #0d6efd;
+                    outline: none;
+                }
+                .dropdown-menu {
+                    min-width: 200px;
+                }
+                .nav-item .badge {
+                    background-color: #0d6efd;
+                }
+            `}</style>
         </>
     )
 }
 
-export default Header
+export default Header;
