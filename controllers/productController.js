@@ -1,5 +1,7 @@
 import productModel from "../models/productModel.js";
 import categoryModel from "../models/categoryModel.js";
+import reviewModel from "../models/reviewModel.js";
+
 import fs from "fs";
 import slugify from "slugify";
 
@@ -308,6 +310,51 @@ export const productCategoryController = async (req, res) => {
       success: false,
       error,
       message: "Error While Getting products",
+    });
+  }
+};
+
+
+//product review 
+export const addReviewController = async (req, res) => {
+  try {
+    const { productId, rating, comment } = req.body;
+    const userId = req.user._id; // Assuming user is authenticated and we have access to the user ID
+
+    // Validate input
+    if (!rating || !comment) {
+      return res.status(400).send({ error: "Rating and Comment are required" });
+    }
+
+    // Create a new review
+    const review = new reviewModel({
+      product: productId,
+      user: userId,
+      rating,
+      comment,
+    });
+
+    await review.save();
+
+    // Optionally, update the product's average rating here
+    const product = await productModel.findById(productId);
+    const reviews = await reviewModel.find({ product: productId });
+    const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
+
+    product.rating = averageRating; // Assuming you have a rating field in the product schema
+    await product.save();
+
+    res.status(201).send({
+      success: true,
+      message: "Review added successfully",
+      review,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while adding review",
+      error,
     });
   }
 };

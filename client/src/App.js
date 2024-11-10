@@ -27,10 +27,16 @@ import CategoryProduct from "./pages/CategoryProduct";
 import CartPage from "./pages/CartPage";
 import AdminOrders from "./pages/Admin/AdminOrders";
 import UpdateUser from "./pages/Admin/UpdateUser";
+import ReviewForm from "./components/Form/ReviewForm";
+import UserProducts from "./pages/Admin/UserProducts";
 
 function App() {
   return (
-    < >
+    <div style={{
+      backgroundColor: '#f4f9f4', // Same greenish color as the header
+      minHeight: '100vh',
+      paddingTop: '20px'
+    }}>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/product/:slug" element={<ProductDetails />} />
@@ -38,6 +44,7 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/category/:slug" element={<CategoryProduct />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/review/:productId" element={<ReviewForm />} />
         <Route path="/dashboard" element={<PrivateRoute />}>
           <Route path="user" element={<Dashboard />} />
           <Route path="user/orders" element={<Orders />} />
@@ -50,11 +57,11 @@ function App() {
           <Route path="admin/create-product" element={<CreateProduct />} />
           <Route path="admin/product/:slug" element={<UpdateProduct />} />
           <Route path="admin/products" element={<Products />} />
+          <Route path="admin/user-products" element={<UserProducts />} />
           <Route path="admin/users" element={<Users />} />
           <Route path="admin/users/:userId" element={<UpdateUser />} />
           <Route path="admin/orders" element={<AdminOrders />} />
           <Route path="admin/profile" element={<AdminProfile />} />
-
         </Route>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
@@ -64,7 +71,7 @@ function App() {
         <Route path="/policy" element={<Policy />} />
         <Route path="*" element={<Pagenotfound />} />
       </Routes>
-    </>
+    </div>
   );
 }
 

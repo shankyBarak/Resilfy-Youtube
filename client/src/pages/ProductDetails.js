@@ -72,6 +72,12 @@ const ProductDetails = () => {
             onClick={() => addToCart(product)}>
             ADD TO CART
           </button>
+          <button
+            className="btn btn-primary ms-1"
+            onClick={() => navigate(`/review/${product._id}`)}
+          >
+            Write a Review
+          </button>
         </div>
       </div>
       <hr />
@@ -104,6 +110,7 @@ const ProductDetails = () => {
                 >
                   ADD TO CART
                 </button>
+
               </div>
             </div>
           ))}

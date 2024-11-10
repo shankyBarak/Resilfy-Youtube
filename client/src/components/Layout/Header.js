@@ -1,6 +1,6 @@
-import React from 'react'
-import { NavLink, Link } from 'react-router-dom'
-import { useAuth } from '../../context/auth'
+import React from 'react';
+import { NavLink, Link } from 'react-router-dom';
+import { useAuth } from '../../context/auth';
 import toast from "react-hot-toast";
 import SearchInput from '../Form/SearchInput';
 import useCategory from '../../hooks/useCategory';
@@ -8,9 +8,10 @@ import { useCart } from '../../context/cart';
 import { Badge } from 'antd';
 
 const Header = () => {
-    const [auth, setAuth] = useAuth()
+    const [auth, setAuth] = useAuth();
     const [cart] = useCart();
-    const categories = useCategory()
+    const categories = useCategory();
+
     const handleLogout = () => {
         setAuth({
             ...auth,
@@ -20,9 +21,18 @@ const Header = () => {
         localStorage.removeItem("auth");
         toast.success("Logout Successfully");
     };
+
     return (
         <>
-            <nav className="navbar navbar-expand-lg bg-body-tertiary">
+            <nav
+                className="navbar navbar-expand-lg"
+                style={{
+                    backgroundColor: '#e2f1e2',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                    padding: '10px 20px',
+                    position: 'relative',
+                }}
+            >
                 <div className="container-fluid">
                     <button
                         className="navbar-toggler"
@@ -36,15 +46,34 @@ const Header = () => {
                         <span className="navbar-toggler-icon" />
                     </button>
                     <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
-                        <Link to="/" className="navbar-brand">
-                            🛒 Reselify
+                        <Link
+                            to="/"
+                            className="navbar-brand"
+                            style={{
+                                fontWeight: '600',
+                                fontSize: '1.5rem',  // Decreased font size
+                                color: '#2e3d49',
+                                fontFamily: "'Montserrat', sans-serif",
+                                letterSpacing: '1px',
+                                transition: 'color 0.3s ease, transform 0.2s ease',
+                                position: 'relative',
+                                top: '-5px', // Shifted upward slightly
+                            }}
+                        >
+                            Reselify
                         </Link>
-                        <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li className="nav-item search-container">
-                                <SearchInput />
-                            </li>
+                        <ul className="navbar-nav mx-auto mb-2 mb-lg-0" style={{ gap: '30px' }}>
                             <li className="nav-item">
-                                <NavLink to="/" className="nav-link ">
+                                <NavLink
+                                    to="/"
+                                    className="nav-link"
+                                    style={{
+                                        fontSize: '1.1rem',
+                                        color: '#333',
+                                        padding: '10px 15px',
+                                        transition: 'color 0.3s ease, transform 0.2s ease',
+                                    }}
+                                >
                                     Home
                                 </NavLink>
                             </li>
@@ -53,6 +82,11 @@ const Header = () => {
                                     className="nav-link dropdown-toggle"
                                     to={"/categories"}
                                     data-bs-toggle="dropdown"
+                                    style={{
+                                        fontSize: '1.1rem',
+                                        color: '#333',
+                                        transition: 'color 0.3s ease, transform 0.2s ease',
+                                    }}
                                 >
                                     Categories
                                 </Link>
@@ -74,19 +108,39 @@ const Header = () => {
                                     ))}
                                 </ul>
                             </li>
-
-                            {!auth.user ? (<>
-                                <li className="nav-item">
-                                    <NavLink to="/register" className="nav-link">
-                                        Register
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink to="/login" className="nav-link">
-                                        Login
-                                    </NavLink>
-                                </li>
-                            </>) : (
+                            <li className="nav-item search-container">
+                                <SearchInput />
+                            </li>
+                            {!auth.user ? (
+                                <>
+                                    <li className="nav-item">
+                                        <NavLink
+                                            to="/register"
+                                            className="nav-link"
+                                            style={{
+                                                fontSize: '1.1rem',
+                                                color: '#333',
+                                                transition: 'color 0.3s ease, transform 0.2s ease',
+                                            }}
+                                        >
+                                            Register
+                                        </NavLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <NavLink
+                                            to="/login"
+                                            className="nav-link"
+                                            style={{
+                                                fontSize: '1.1rem',
+                                                color: '#333',
+                                                transition: 'color 0.3s ease, transform 0.2s ease',
+                                            }}
+                                        >
+                                            Login
+                                        </NavLink>
+                                    </li>
+                                </>
+                            ) : (
                                 <>
                                     <li className="nav-item dropdown">
                                         <NavLink
@@ -95,6 +149,11 @@ const Header = () => {
                                             role="button"
                                             data-bs-toggle="dropdown"
                                             aria-expanded="false"
+                                            style={{
+                                                fontSize: '1.1rem',
+                                                color: '#333',
+                                                transition: 'color 0.3s ease, transform 0.2s ease',
+                                            }}
                                         >
                                             {auth?.user?.name}
                                         </NavLink>
@@ -108,7 +167,6 @@ const Header = () => {
                                                     Dashboard
                                                 </NavLink>
                                             </li>
-
                                             <li>
                                                 <NavLink
                                                     onClick={handleLogout}
@@ -124,7 +182,15 @@ const Header = () => {
                             )}
                             <li className="nav-item">
                                 <Badge count={cart?.length} showZero>
-                                    <NavLink to="/cart" className="nav-link">
+                                    <NavLink
+                                        to="/cart"
+                                        className="nav-link"
+                                        style={{
+                                            fontSize: '1.1rem',
+                                            color: '#333',
+                                            transition: 'color 0.3s ease, transform 0.2s ease',
+                                        }}
+                                    >
                                         Cart
                                     </NavLink>
                                 </Badge>
@@ -135,51 +201,41 @@ const Header = () => {
             </nav>
 
             <style jsx>{`
-                .navbar {
-                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                    padding: 10px 20px;
+                .navbar-nav .nav-link:hover,
+                .navbar-brand:hover {
+                    color: #4CAF50;
+                    transform: scale(1.05);
                 }
-                .navbar-brand {
-                    font-weight: bold;
-                    font-size: 1.8rem;
-                    color: #0d6efd;
-                }
-                .navbar-nav .nav-link {
-                    font-size: 1.1rem;
-                    margin-left: 15px;
-                    color: #333;
-                    transition: color 0.3s ease;
-                }
-                .navbar-nav .nav-link:hover {
-                    color: #0d6efd;
+                .navbar-nav {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 30px;
                 }
                 .search-container {
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    width: 100%;
+                    width: 350px;
                 }
                 .search-container input {
-                    width: 250px;
-                    padding: 10px;
-                    font-size: 1.1rem;
-                    border-radius: 5px;
+                    width: 100%;
+                    padding: 8px 20px;
+                    font-size: 1rem;
+                    border-radius: 20px;
                     border: 1px solid #ddd;
                     transition: all 0.3s ease;
                 }
                 .search-container input:focus {
-                    border-color: #0d6efd;
+                    border-color: #4CAF50;
                     outline: none;
                 }
-                .dropdown-menu {
-                    min-width: 200px;
-                }
-                .nav-item .badge {
-                    background-color: #0d6efd;
+                .navbar-toggler {
+                    border: none;
                 }
             `}</style>
         </>
-    )
-}
+    );
+};
 
 export default Header;

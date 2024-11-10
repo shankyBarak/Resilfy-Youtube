@@ -20,7 +20,7 @@ const UpdateProduct = () => {
   const [photo, setPhoto] = useState("");
   const [id, setId] = useState("");
 
-  //get single product
+  // Get single product
   const getSingleProduct = async () => {
     try {
       const { data } = await axios.get(
@@ -30,7 +30,6 @@ const UpdateProduct = () => {
       setId(data.product._id);
       setDescription(data.product.description);
       setPrice(data.product.price);
-      setPrice(data.product.price);
       setQuantity(data.product.quantity);
       setShipping(data.product.shipping);
       setCategory(data.product.category._id);
@@ -38,11 +37,12 @@ const UpdateProduct = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getSingleProduct();
-    //eslint-disable-next-line
   }, []);
-  //get all category
+
+  // Get all categories
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/category/get-category`);
@@ -51,7 +51,7 @@ const UpdateProduct = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something wwent wrong in getting catgeory");
+      toast.error("Something went wrong in getting categories");
     }
   };
 
@@ -59,7 +59,7 @@ const UpdateProduct = () => {
     getAllCategory();
   }, []);
 
-  //create product function
+  // Update product function
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
@@ -70,7 +70,7 @@ const UpdateProduct = () => {
       productData.append("quantity", quantity);
       photo && productData.append("photo", photo);
       productData.append("category", category);
-      const { data } = axios.put(
+      const { data } = await axios.put(
         `${process.env.REACT_APP_API}/api/v1/product/update-product/${id}`,
         productData
       );
@@ -82,28 +82,70 @@ const UpdateProduct = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("something went wrong");
+      toast.error("Something went wrong");
     }
   };
 
-  //delete a product
+  // Delete product function
   const handleDelete = async () => {
     try {
-      let answer = window.prompt("Are You Sure want to delete this product ? ");
+      let answer = window.prompt("Are you sure you want to delete this product?");
       if (!answer) return;
       const { data } = await axios.delete(
         `${process.env.REACT_APP_API}/api/v1/product/delete-product/${id}`
       );
-      toast.success("Product Deleted Succfully");
+      toast.success("Product Deleted Successfully");
       navigate("/dashboard/admin/products");
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
     }
   };
+
   return (
-    <Layout title={"Dashboard - Create Product"}>
-      <div className="container-fluid m-3 p-3">
+    <Layout title={"Dashboard - Update Product"}>
+      <style>{`
+        .update-product-container {
+          background-color: #f7f9fc;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .form-control {
+          border-radius: 5px;
+          border: 1px solid #ced4da;
+          padding: 10px;
+        }
+        .form-label {
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+        .btn-primary {
+          background-color: #007bff;
+          border-color: #007bff;
+          padding: 10px 20px;
+        }
+        .btn-primary:hover {
+          background-color: #0056b3;
+          border-color: #0056b3;
+        }
+        .btn-danger {
+          background-color: #dc3545;
+          border-color: #dc3545;
+          padding: 10px 20px;
+        }
+        .btn-danger:hover {
+          background-color: #c82333;
+          border-color: #bd2130;
+        }
+        .product-image {
+          height: 200px;
+          object-fit: cover;
+          margin: 10px 0;
+        }
+      `}</style>
+
+      <div className="container-fluid m-3 p-3 update-product-container">
         <div className="row">
           <div className="col-md-3">
             <AdminMenu />
@@ -117,9 +159,7 @@ const UpdateProduct = () => {
                 size="large"
                 showSearch
                 className="form-select mb-3"
-                onChange={(value) => {
-                  setCategory(value);
-                }}
+                onChange={(value) => setCategory(value)}
                 value={category}
               >
                 {categories?.map((c) => (
@@ -128,6 +168,7 @@ const UpdateProduct = () => {
                   </Option>
                 ))}
               </Select>
+
               <div className="mb-3">
                 <label className="btn btn-outline-secondary col-md-12">
                   {photo ? photo.name : "Upload Photo"}
@@ -140,14 +181,14 @@ const UpdateProduct = () => {
                   />
                 </label>
               </div>
+
               <div className="mb-3">
                 {photo ? (
                   <div className="text-center">
                     <img
                       src={URL.createObjectURL(photo)}
                       alt="product_photo"
-                      height={"200px"}
-                      className="img img-responsive"
+                      className="img img-responsive product-image"
                     />
                   </div>
                 ) : (
@@ -155,65 +196,71 @@ const UpdateProduct = () => {
                     <img
                       src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${id}`}
                       alt="product_photo"
-                      height={"200px"}
-                      className="img img-responsive"
+                      className="img img-responsive product-image"
                     />
                   </div>
                 )}
               </div>
+
               <div className="mb-3">
+                <label className="form-label">Product Name</label>
                 <input
                   type="text"
                   value={name}
-                  placeholder="write a name"
+                  placeholder="Enter product name"
                   className="form-control"
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
+
               <div className="mb-3">
+                <label className="form-label">Description</label>
                 <textarea
-                  type="text"
                   value={description}
-                  placeholder="write a description"
+                  placeholder="Write a description of your product"
                   className="form-control"
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
 
               <div className="mb-3">
+                <label className="form-label">Price</label>
                 <input
                   type="number"
                   value={price}
-                  placeholder="write a Price"
+                  placeholder="Enter product price"
                   className="form-control"
                   onChange={(e) => setPrice(e.target.value)}
                 />
               </div>
+
               <div className="mb-3">
+                <label className="form-label">Quantity</label>
                 <input
                   type="number"
                   value={quantity}
-                  placeholder="write a quantity"
+                  placeholder="Enter available quantity"
                   className="form-control"
                   onChange={(e) => setQuantity(e.target.value)}
                 />
               </div>
+
               <div className="mb-3">
+                <label className="form-label">Shipping</label>
                 <Select
                   bordered={false}
-                  placeholder="Select Shipping "
+                  placeholder="Select Shipping Option"
                   size="large"
                   showSearch
                   className="form-select mb-3"
-                  onChange={(value) => {
-                    setShipping(value);
-                  }}
+                  onChange={(value) => setShipping(value)}
                   value={shipping ? "yes" : "No"}
                 >
                   <Option value="0">No</Option>
                   <Option value="1">Yes</Option>
                 </Select>
               </div>
+
               <div className="mb-3">
                 <button className="btn btn-primary" onClick={handleUpdate}>
                   UPDATE PRODUCT
